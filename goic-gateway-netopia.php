@@ -50,7 +50,8 @@ function ggn_send_to_mobilpay($order, $checkout_page_permalink){
     #below is where mobilPay will send the payment result. This URL will always be called first; mandatory
     $confirm_url = $checkout_page_permalink . '?status=ggnConfirm';
     #below is where mobilPay redirects the client once the payment process is finished. Not to be mistaken for a "successURL" nor "cancelURL"; mandatory
-    $return_url = $checkout_page_permalink . '?status=success&order_id=' . $order_id_full;
+    // $return_url = $checkout_page_permalink . '?status=success&order_id=' . $order_id_full;
+    $return_url = $checkout_page_permalink . '?status=success';
 
     try {
         $mobilpay_request = new Mobilpay_Payment_Request_Card();
@@ -178,6 +179,7 @@ function ggn_confirm_action(){
                 $response_action = $objPmReq->objPmNotify->action;
                 
                 if( array_key_exists( $response_action , $statuses ) ){
+                    update_field('goicc_payment_method', 'card_netopia', $order_id);
                     update_field('goicc_order_status', $statuses[$response_action], $order_id);
                     if( $response_action === 'confirmed' )
                         update_field('goicc_payment_status', 'paid', $order_id);
