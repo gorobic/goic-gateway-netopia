@@ -166,12 +166,17 @@ function ggn_confirm_action(){
             {
             $objPmReq = Mobilpay_Payment_Request_Abstract::factoryFromEncrypted($_POST['env_key'], $_POST['data'], $private_key_file);
             
+            $order_id = check_order($objPmReq->orderId);
+
             // action = status only if the associated error code is zero
             if ($objPmReq->objPmNotify->errorCode == 0) {
 
-                $order_id = check_order($objPmReq->orderId);
+                // am comentat cazurile cu peinding deoarece statusul implicit este pending
                 $statuses = [
                     'confirmed' => 'completed',
+                    // 'confirmed_pending' => 'pending',
+                    // 'paid_pending' => 'pending',
+                    // 'paid' => 'pending',
                     'canceled' => 'cancelled',
                     'credit' => 'refunded'
                 ];
@@ -227,9 +232,13 @@ function ggn_confirm_action(){
                     }
             }
             else {
-            //update DB, SET status = "rejected"
-            $errorMessage = $objPmReq->objPmNotify->errorMessage;
-                }
+                //update DB, SET status = "rejected"
+
+                update_field('goicc_payment_method', 'card_netopia', $order_id);
+                update_field('goicc_order_status', 'failed', $order_id);
+
+                $errorMessage = $objPmReq->objPmNotify->errorMessage;
+            }
             }
             catch(Exception $e)
             {
