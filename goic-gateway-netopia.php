@@ -51,7 +51,7 @@ function ggn_send_to_mobilpay($order, $checkout_page_permalink){
     $confirm_url = $checkout_page_permalink . '?status=ggnConfirm';
     #below is where mobilPay redirects the client once the payment process is finished. Not to be mistaken for a "successURL" nor "cancelURL"; mandatory
     // $return_url = $checkout_page_permalink . '?status=success&order_id=' . $order_id_full;
-    $return_url = $checkout_page_permalink . '?status=success&test=test';
+    $return_url = $checkout_page_permalink . '?status=success';
 
     try {
         $mobilpay_request = new Mobilpay_Payment_Request_Card();
