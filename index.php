@@ -31,11 +31,13 @@ if (!defined('ABSPATH'))
 
     function ggn_custom_enqueue_wp(){
         global $plugin_dir_url, $plugin_dir; 
-        if($account_page_id = get_theme_mod( 'goicc_account_page' )){
-            if(is_page($account_page_id)){
-                wp_enqueue_script( 'ggn_scripts', $plugin_dir_url.'includes/index.js', array(), filemtime($plugin_dir.'includes/index.js'), true );
-                wp_localize_script('ggn_scripts', 'AJAX_URL', admin_url('admin-ajax.php'));
-            }
+        if(
+            ( $account_page_id = get_theme_mod( 'goicc_account_page' ) && is_page($account_page_id) ) 
+            || 
+            ( $thankyou_page_id = get_theme_mod( 'goicc_thankyou_page' ) && is_page($thankyou_page_id) )
+        ){
+            wp_enqueue_script( 'ggn_scripts', $plugin_dir_url.'includes/index.js', array(), filemtime($plugin_dir.'includes/index.js'), true );
+            wp_localize_script('ggn_scripts', 'AJAX_URL', admin_url('admin-ajax.php'));
         }
     }
     add_action( 'wp_enqueue_scripts', 'ggn_custom_enqueue_wp' );
