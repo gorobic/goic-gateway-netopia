@@ -128,7 +128,7 @@ add_action('goicc_after_submit_return', 'ggn_after_submit_return', 10, 3);
 function ggn_billing_history_buttons($order_id, $order_meta){ // @todo: de adaugat functionalitate pe buton
     $order_status = $order_meta['goicc_order_status'][0];
     if(in_array($order_status, array('pending', 'on-hold', 'failed'))){ ?>
-        <a onclick="ggn_click_pay_btn(this)" data-id="<?php echo $order_id; ?>" data-unique_id="<?php echo $order_meta['goicc_order_unique_id'][0]; ?>" class="btn btn-sm btn-primary ggn-pay-btn">
+        <a onclick="ggn_click_pay_btn(this)" data-id="<?php echo $order_id; ?>" data-unique_id="<?php echo $order_meta['goicc_order_unique_id'][0]; ?>" class="btn btn-sm btn-primary ggn-pay-btn m-1">
             <?php _e('Pay now','goic-gateway-netopia'); ?>
         </a>
     <?php }
